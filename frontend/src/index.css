@@ -1,0 +1,50 @@
+body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+    monospace;
+}
+
+input {
+  font-size: larger;
+}
+
+
+button {
+  font-size: larger;
+  margin-left: 15px;
+}
+
+span {
+  padding: 5px 15px;
+  background-color: orange;
+}
+
+
+.note {
+  background-color: #ffeb3b;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  cursor: move;
+  max-width: 200px; /* Set the maximum width for the notes */
+}
+
+.create-note {
+  margin-top: 10px;
+}
+
+.create-note input {
+  margin-right: 10px;
+}
+
+.create-note textarea {
+  width: 100%; /* Make the textarea expand to the full width of the container */
+}
