@@ -3,6 +3,8 @@ import {useState, useEffect} from 'react'
 import io from 'socket.io-client'
 import {nanoid} from "nanoid"
 import Whiteboard from './Whiteboard';
+import 'bootstrap/dist/css/bootstrap.min.css';
+
 
 // no dotenv
 const socket = io.connect("http://localhost:5000")

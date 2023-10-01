@@ -22,19 +22,23 @@ button {
   margin-left: 15px;
 }
 
-span {
+s2pan {
   padding: 5px 15px;
   background-color: orange;
 }
 
-
 .note {
-  background-color: #ffeb3b;
-  padding: 10px;
-  border: 1px solid #ccc;
-  border-radius: 5px;
   cursor: move;
-  max-width: 200px; /* Set the maximum width for the notes */
+}
+
+
+.customname{
+  font-size: 12px !important;
+}
+
+.nav-btn{
+  font-size: 10px !important;
+  padding: 3px 6px !important;
 }
 
 .create-note {

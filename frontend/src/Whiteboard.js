@@ -1,6 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import Draggable from 'react-draggable';
 import io from 'socket.io-client';
+import Button from 'react-bootstrap/Button';
+import Card from 'react-bootstrap/Card';
+import Nav from 'react-bootstrap/Nav';
+import Navbar from 'react-bootstrap/Navbar';
+import Container from 'react-bootstrap/Container';
+
 
 const socket = io('http://localhost:3000'); // Replace with your server URL
 
@@ -87,23 +93,33 @@ const Whiteboard = () => {
             position={note.position}
             onStop={(e, data) => handleDragStop(note.id, data)}
           >
-            <div id={`note-${note.id}`} className="note">
-              <div className="note-header">{note.title}</div>
-              <div className="note-content">{note.content}</div>
-              <input
-                type="text"
-                value={note.title}
-                onChange={(e) => handleNoteTitleChange(note.id, e.target.value)}
-                placeholder="Title"
-                className="note-input"
-              />
-              <textarea
-                placeholder="Content"
-                value={note.content}
-                onChange={(e) => handleNoteContentChange(note.id, e.target.value)}
-                className="note-input"
-              />
-            </div>
+            <Card style={{ width: '18rem' }}id={`note-${note.id}`} className="note bg-info">
+            <Card.Header className='p-2'> 
+              <Navbar className='p-1'>
+                <Navbar.Brand className="customname justify-content-start">created by: <span><br/></span> <b>{note.title}</b></Navbar.Brand>
+                
+                <Container className='p-1 justify-content-end'>
+                  <Button style={{ borderColor: 'lightskyblue' }} 
+                    className="justify-content-end nav-btn" variant="info">&#9679;
+                  </Button>{' '}
+                  <Button style={{ borderColor: 'yellow' }} 
+                    className="justify-content-end nav-btn" variant="warning">&#9679;
+                  </Button>{' '}
+                  <Button style={{ borderColor: 'greenyellow' }} 
+                    className="justify-content-end nav-btn" variant="success">&#9679;
+                  </Button>{' '}
+                  <Button style={{ borderColor: 'pink' }} 
+                    className="justify-content-end nav-btn" variant="danger">X
+                  </Button>{' '}
+               </Container>
+              </Navbar>
+            </Card.Header>
+              <Card.Body>
+              <Card.Title className="note-header">{note.title} </Card.Title>
+                <Card.Text>{note.content}</Card.Text>
+              </Card.Body>
+            </Card>
+            
           </Draggable>
         ))}
       </div>
@@ -129,3 +145,19 @@ const Whiteboard = () => {
 };
 
 export default Whiteboard;
+
+/*function BasicExample() {
+  return (
+    <Card style={{ width: '18rem' }}>
+      <Card.Body>
+        <Card.Title>Card Title</Card.Title>
+        <Card.Text>
+          Some quick example text to build on the card title and make up the
+          bulk of the card's content.
+        </Card.Text>
+      </Card.Body>
+    </Card>
+  );
+}
+
+export default BasicExample;*/
