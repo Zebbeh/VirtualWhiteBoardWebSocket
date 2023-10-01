@@ -4,30 +4,9 @@ import io from 'socket.io-client';
 
 const socket = io('http://localhost:3000'); // Replace with your server URL
 
-const Whiteboard = () => {
-    const [notes, setNotes] = useState([]);
-    const [newNote, setNewNote] = useState({ title: '', content: '' });
-
-  useEffect(() => {
-    // Listen for updates from the server
-    socket.on('updateNotes', (updatedNotes) => {
-      setNotes(updatedNotes);
-    });
-
-    // Cleanup on component unmount
-    return () => {
-      socket.off('updateNotes');
-    };
-  }, []);
-
-  const handleDragStop = (id, position) => {
-    const updatedNotes = notes.map((note) =>
-      note.id === id ? { ...note, position } : note
-    );
-
-    setNotes(updatedNotes);
-    socket.emit('updateNotes', updatedNotes);
-  };
+const Whiteboard = ({ socket }) => {
+  const [notes, setNotes] = useState([]);
+  const [newNote, setNewNote] = useState({ title: '', content: '' });
 
   const handleCreateNote = (position) => {
     const createdNote = {
@@ -38,13 +17,18 @@ const Whiteboard = () => {
     };
 
     const updatedNotes = [...notes, createdNote];
+  setNotes(updatedNotes);
 
-    setNotes(updatedNotes);
-    socket.emit('updateNotes', updatedNotes);
+  // Debugging: Log the updatedNotes being emitted
+  console.log('Emitting updateNotes event from the client:', updatedNotes);
 
-    // Clear the input fields after creating a note
-    setNewNote({ title: '', content: '' });
-  };
+  // Emit the updateNotes event to the server
+  socket.emit('updateNotes', updatedNotes);
+
+  // Clear the input fields after creating a note
+  setNewNote({ title: '', content: '' });
+};
+
 
   const handleNoteContentChange = (id, newContent) => {
     const updatedNotes = notes.map((note) =>
@@ -64,6 +48,28 @@ const Whiteboard = () => {
     socket.emit('updateNotes', updatedNotes);
   };
 
+  const handleNoteClick = (id) => {
+    // Add logic to enable editing for the clicked note
+    // For simplicity, I'm toggling the 'editing' property in this example
+    const updatedNotes = notes.map((note) =>
+      note.id === id ? { ...note, editing: !note.editing } : note
+    );
+
+    setNotes(updatedNotes);
+
+    // Emit an event to signal that a note was clicked
+    socket.emit('noteClicked', id);
+  };
+
+  const handleDragStop = (id, data) => {
+    // Handle drag stop logic here
+    const updatedNotes = notes.map((note) =>
+      note.id === id ? { ...note, position: { x: data.x, y: data.y } } : note
+    );
+
+    setNotes(updatedNotes);
+    socket.emit('updateNotes', updatedNotes);
+  };
   const handleContextMenu = (e) => {
     e.preventDefault();
     // You can add additional logic here if needed
@@ -87,35 +93,20 @@ const Whiteboard = () => {
             position={note.position}
             onStop={(e, data) => handleDragStop(note.id, data)}
           >
-            <div id={`note-${note.id}`} className="note">
+            <div
+              id={`note-${note.id}`}
+              className={`note ${note.editing ? 'editing' : ''}`}
+              onClick={() => handleNoteClick(note.id)}
+            >
               <div className="note-header">{note.title}</div>
               <div className="note-content">{note.content}</div>
-              <input
-                type="text"
-                value={note.title}
-                onChange={(e) => handleNoteTitleChange(note.id, e.target.value)}
-                placeholder="Title"
-                className="note-input"
-              />
-              <textarea
-                placeholder="Content"
-                value={note.content}
-                onChange={(e) => handleNoteContentChange(note.id, e.target.value)}
-                className="note-input"
-              />
             </div>
           </Draggable>
         ))}
       </div>
       {/* Input fields for creating new notes at the bottom of the page */}
       <div className="create-note" style={{ position: 'fixed', bottom: 0, left: 0, width: '100%', background: '#f9f9f9', padding: '10px', borderTop: '1px solid #ccc' }}>
-        <input
-          type="text"
-          placeholder="Title"
-          value={newNote.title}
-          onChange={(e) => setNewNote({ ...newNote, title: e.target.value })}
-          className="create-note-input"
-        />
+        {/* Removed input fields */}
         <textarea
           placeholder="Content"
           value={newNote.content}
