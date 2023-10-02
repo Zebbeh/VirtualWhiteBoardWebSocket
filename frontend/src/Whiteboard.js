@@ -3,9 +3,13 @@ import Draggable from 'react-draggable';
 import io from 'socket.io-client';
 import Button from 'react-bootstrap/Button';
 import Card from 'react-bootstrap/Card';
-import Nav from 'react-bootstrap/Nav';
 import Navbar from 'react-bootstrap/Navbar';
 import Container from 'react-bootstrap/Container';
+import Form from 'react-bootstrap/Form';
+import FloatingLabel from 'react-bootstrap/FloatingLabel';
+import Row from 'react-bootstrap/Row';
+import Col from 'react-bootstrap/Col';
+import Badge from 'react-bootstrap/Badge';
 
 
 const socket = io('http://localhost:3000'); // Replace with your server URL
@@ -35,12 +39,11 @@ useEffect(() => {
     socket.emit('updateNotes', updatedNotes);
   };
 
-  const handleCreateNote = (position) => {
+  const handleCreateNote = () => {
     const createdNote = {
       id: Date.now(),
       title: newNote.title,
       content: newNote.content,
-      position,
     };
 
     const updatedNotes = [...notes, createdNote];
@@ -100,24 +103,45 @@ useEffect(() => {
                 <Navbar.Brand className="customname justify-content-start">created by: <span><br/></span> <b>{note.title}</b></Navbar.Brand>
                 
                 <Container className='p-1 justify-content-end'>
-                  <Button style={{ borderColor: 'lightskyblue' }} 
-                    className="justify-content-end nav-btn" variant="info">&#9679;
+                  <Button onClick={() => document.getElementById(`note-${note.id}`).classList.add("bg-info")} 
+                  style={{ borderColor: 'lightskyblue' }} className="justify-content-end nav-btn" variant="info">&#9679;
                   </Button>{' '}
-                  <Button style={{ borderColor: 'yellow' }} 
-                    className="justify-content-end nav-btn" variant="warning">&#9679;
+                  <Button onClick={() => document.getElementById(`note-${note.id}`).classList.add("bg-warning")} 
+                  style={{ borderColor: 'yellow' }} className="justify-content-end nav-btn" variant="warning">&#9679;
                   </Button>{' '}
-                  <Button style={{ borderColor: 'greenyellow' }} 
-                    className="justify-content-end nav-btn" variant="success">&#9679;
+                  <Button onClick={() => document.getElementById(`note-${note.id}`).classList.add("bg-light")}  
+                  style={{ borderColor: 'greenyellow' }} className="justify-content-end nav-btn" variant="light">&#9679;
                   </Button>{' '}
-                  <Button style={{ borderColor: 'pink' }} 
-                    className="justify-content-end nav-btn" variant="danger">X
+                  <Button onClick={() => document.getElementById(`note-${note.id}`).remove()} 
+                  style={{ borderColor: 'pink' }} className="justify-content-end nav-btn" variant="danger">X
                   </Button>{' '}
                </Container>
               </Navbar>
             </Card.Header>
               <Card.Body>
+              {/*<Form>
+                <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
+                  <Form.Control 
+                    type="text" 
+                    placeholder="Title" 
+                    value={newNote.title}
+                    onChange={(e) => setNewNote({ ...newNote, title: e.target.value })} 
+                  />
+                </Form.Group>
+                <Form.Group className="mb-3 bg-info" controlId="exampleForm.ControlTextarea1">
+                  <Form.Control className='bg-info' 
+                    as="textarea" 
+                    rows={4}
+                    value={newNote.content}
+                    onChange={(e) => setNewNote({ ...newNote, content: e.target.value })}  
+                  />
+                </Form.Group>
+              </Form>*/}
+
+              
               <Card.Title className="note-header">{note.title} </Card.Title>
-                <Card.Text>{note.content}</Card.Text>
+                <Card.Text>{note.content}</Card.Text> 
+               <Card.Text></Card.Text>
               </Card.Body>
             </Card>
             
@@ -125,15 +149,70 @@ useEffect(() => {
         ))}
       </div>
       {/* Input fields for creating new notes at the bottom of the page */}
-      <div className="create-note" style={{ position: 'fixed', bottom: 0, left: 0, width: '100%', background: '#f9f9f9', padding: '10px', borderTop: '1px solid #ccc' }}>
-        {/* Removed input fields */}
+      <div className="create-note" style={{ position: 'fixed', top: 0, left: 0, width: '100%', background: '#f9f9f9', margin: '0px',paddingBottom:"0px", borderTop: '1px solid #ccc' }}>
+      <Row className="g-2 mx-2 mt-2">
+        <Col md>
+          <FloatingLabel controlId="floatingSelect" label="Groups">
+            <Form.Select className=''>
+              <option value="Sov Patrullen">Sov Patrullen</option>
+              <option value="Projektledning">Projektledning</option>
+              <option value="HR">HR</option>
+            </Form.Select>
+          </FloatingLabel>
+        </Col>
+        <Col md>
+          <FloatingLabel controlId="floatingInputGrid" label="Title">
+            <Form.Control 
+              type="text" 
+              placeholder="Title" 
+              value={newNote.title}
+              onChange={(e) => setNewNote({ ...newNote, title: e.target.value })}
+              className="create-note-input"/>
+          </FloatingLabel>
+        </Col>
+      </Row>
+        
+      <Row className='g-2 mx-2 mt-2'>
+      <Col md={8}>
+          <FloatingLabel
+            controlId="floatingTextarea"
+            label="Comments"
+            className="mb-3"
+          >
+            <Form.Control 
+              as="textarea" 
+              placeholder="Leave a comment here"
+              value={newNote.content}
+              onChange={(e) => setNewNote({ ...newNote, content: e.target.value })}
+              className="create-note-input"
+            />
+          </FloatingLabel>
+        </Col>
+        <Col md>
+          <div className="d-grid gap-2">
+            <Button
+            size="lg"
+            className='h-100' 
+            onClick={() => handleCreateNote()} 
+            variant="primary">New Note</Button>{' '}
+          </div>
+        </Col>
+      </Row>
+      
+     {/*}
+      <input
+          type="text"
+          placeholder="Title"
+          value={newNote.title}
+          onChange={(e) => setNewNote({ ...newNote, title: e.target.value })}
+          className="create-note-input"
+        />
         <textarea
           placeholder="Content"
           value={newNote.content}
           onChange={(e) => setNewNote({ ...newNote, content: e.target.value })}
           className="create-note-input"
-        />
-        <button onClick={() => handleCreateNote({ x: 0, y: 0 })} className="create-note-button">Create Note</button>
+        />*/}
       </div>
     </div>
   );

@@ -22,13 +22,11 @@ button {
   margin-left: 15px;
 }
 
-s2pan {
-  padding: 5px 15px;
-  background-color: orange;
-}
 
 .note {
   cursor: move;
+  top: 150px;
+  left: 75px;
 }
 
 
@@ -41,7 +39,7 @@ s2pan {
   padding: 3px 6px !important;
 }
 
-.create-note {
+.crea2te-note {
   margin-top: 10px;
 }
 
