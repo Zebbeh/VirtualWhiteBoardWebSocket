@@ -44,6 +44,7 @@ useEffect(() => {
     };
 
     const updatedNotes = [...notes, createdNote];
+  setNotes(updatedNotes);
 
   setNotes(updatedNotes);
   socket.emit('updateNotes', updatedNotes);
@@ -125,13 +126,7 @@ useEffect(() => {
       </div>
       {/* Input fields for creating new notes at the bottom of the page */}
       <div className="create-note" style={{ position: 'fixed', bottom: 0, left: 0, width: '100%', background: '#f9f9f9', padding: '10px', borderTop: '1px solid #ccc' }}>
-        <input
-          type="text"
-          placeholder="Title"
-          value={newNote.title}
-          onChange={(e) => setNewNote({ ...newNote, title: e.target.value })}
-          className="create-note-input"
-        />
+        {/* Removed input fields */}
         <textarea
           placeholder="Content"
           value={newNote.content}

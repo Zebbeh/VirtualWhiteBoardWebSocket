@@ -17,15 +17,24 @@ io.on('connection', (socket) => {
 
   // Listen for note updates from the client
   socket.on('updateNotes', (updatedNotes) => {
+    console.log('Received updateNotes event from a client:', updatedNotes);
     notes = updatedNotes;
-    // Broadcast the changes to all connected clients
+
+    // Broadcast the changes to all connected clients, including the sender
     io.emit('updateNotes', notes);
+  });
+
+  // Listen for noteClicked event
+  socket.on('noteClicked', (noteId) => {
+    // Broadcast the noteClicked event to all connected clients, including the sender
+    io.emit('noteClicked', noteId);
   });
 
   socket.on('disconnect', () => {
     console.log('User disconnected');
   });
 });
+
 
 server.listen(PORT, () => {
   console.log(`Server is running on http://localhost:${PORT}`);

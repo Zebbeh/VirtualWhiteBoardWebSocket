@@ -9,26 +9,25 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 // no dotenv
 const socket = io.connect("http://localhost:5000")
 const userName = nanoid(4)
-function App() {
-  const [message, title, setMessage] = useState('')
-  const [chat, setChat] = useState([])
 
-  const sendChat = (e) => {
-    e.preventDefault()
-    socket.emit("chat", {message, userName})
-    setMessage('')
-  };
+function App() {
+  const [chat, setChat] = useState([]);
 
   useEffect(() => {
-    socket.on("chat", (payload) => {
-      setChat([...chat, payload])
-    })
-  })
+    // Listen for the noteClicked event
+    socket.on('noteClicked', (noteId) => {
+      console.log(`Note with ID ${noteId} clicked`);
+      // You can perform any actions when a note is clicked here
+    });
+  }, []);
+
   return (
     <div className="App">
-      <Whiteboard />
+      {/* Pass the socket instance to the Whiteboard component */}
+      <Whiteboard socket={socket} />
+      {/* ... (other components) */}
     </div>
   );
-}
+};
 
 export default App;
