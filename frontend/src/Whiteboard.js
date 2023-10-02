@@ -11,10 +11,10 @@ import Container from 'react-bootstrap/Container';
 const socket = io('http://localhost:3000'); // Replace with your server URL
 
 const Whiteboard = () => {
-    const [notes, setNotes] = useState([]);
-    const [newNote, setNewNote] = useState({ title: '', content: '' });
+  const [notes, setNotes] = useState([]);
+  const [newNote, setNewNote] = useState({ title: '', content: '' });
 
-  useEffect(() => {
+useEffect(() => {
     // Listen for updates from the server
     socket.on('updateNotes', (updatedNotes) => {
       setNotes(updatedNotes);
@@ -45,12 +45,12 @@ const Whiteboard = () => {
 
     const updatedNotes = [...notes, createdNote];
 
-    setNotes(updatedNotes);
-    socket.emit('updateNotes', updatedNotes);
+  setNotes(updatedNotes);
+  socket.emit('updateNotes', updatedNotes);
 
-    // Clear the input fields after creating a note
-    setNewNote({ title: '', content: '' });
-  };
+  // Clear the input fields after creating a note
+  setNewNote({ title: '', content: '' });
+};
 
   const handleNoteContentChange = (id, newContent) => {
     const updatedNotes = notes.map((note) =>
@@ -70,7 +70,7 @@ const Whiteboard = () => {
     socket.emit('updateNotes', updatedNotes);
   };
 
-  const handleContextMenu = (e) => {
+    const handleContextMenu = (e) => {
     e.preventDefault();
     // You can add additional logic here if needed
   };
