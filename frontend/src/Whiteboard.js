@@ -9,7 +9,6 @@ import Form from 'react-bootstrap/Form';
 import FloatingLabel from 'react-bootstrap/FloatingLabel';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
-import Badge from 'react-bootstrap/Badge';
 
 
 const socket = io('http://localhost:3000'); // Replace with your server URL
@@ -65,15 +64,6 @@ useEffect(() => {
     socket.emit('updateNotes', updatedNotes);
   };
 
-  const handleNoteTitleChange = (id, newTitle) => {
-    const updatedNotes = notes.map((note) =>
-      note.id === id ? { ...note, title: newTitle } : note
-    );
-
-    setNotes(updatedNotes);
-    socket.emit('updateNotes', updatedNotes);
-  };
-
     const handleContextMenu = (e) => {
     e.preventDefault();
     // You can add additional logic here if needed
@@ -93,24 +83,24 @@ useEffect(() => {
       <div className="notes-container">
         {notes.map((note) => (
           <Draggable
-            key={note.id}
+            key={note.id} 
             position={note.position}
             onStop={(e, data) => handleDragStop(note.id, data)}
           >
-            <Card style={{ width: '18rem' }}id={`note-${note.id}`} className="note bg-info">
+            <Card style={{ width: '18rem', backgroundColor: "aqua"}}id={`note-${note.id}`} className="note">
             <Card.Header className='p-2'> 
               <Navbar className='p-1'>
                 <Navbar.Brand className="customname justify-content-start">created by: <span><br/></span> <b>{note.title}</b></Navbar.Brand>
                 
                 <Container className='p-1 justify-content-end'>
-                  <Button onClick={() => document.getElementById(`note-${note.id}`).classList.add("bg-info")} 
-                  style={{ borderColor: 'lightskyblue' }} className="justify-content-end nav-btn" variant="info">&#9679;
+                  <Button onClick={() => document.getElementById(`note-${note.id}`).style.backgroundColor="aqua"} 
+                  style={{ borderColor: 'lightskyblue', backgroundColor: "aqua", color: "black"}} className="justify-content-end nav-btn" variant="info">&#9679;
                   </Button>{' '}
-                  <Button onClick={() => document.getElementById(`note-${note.id}`).classList.add("bg-warning")} 
-                  style={{ borderColor: 'yellow' }} className="justify-content-end nav-btn" variant="warning">&#9679;
+                  <Button onClick={() => document.getElementById(`note-${note.id}`).style.backgroundColor="yellow"} 
+                  style={{ borderColor: 'orange', backgroundColor: "yellow", color: "black"}} className="justify-content-end nav-btn" >&#9679;
                   </Button>{' '}
-                  <Button onClick={() => document.getElementById(`note-${note.id}`).classList.add("bg-light")}  
-                  style={{ borderColor: 'greenyellow' }} className="justify-content-end nav-btn" variant="light">&#9679;
+                  <Button onClick={() => document.getElementById(`note-${note.id}`).style.backgroundColor="lightgray"}  
+                  style={{ borderColor: 'greenyellow', backgroundColor: "lightgray", color: "black" }} className="justify-content-end nav-btn">&#9679;
                   </Button>{' '}
                   <Button onClick={() => document.getElementById(`note-${note.id}`).remove()} 
                   style={{ borderColor: 'pink' }} className="justify-content-end nav-btn" variant="danger">X
